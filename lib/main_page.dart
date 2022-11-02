@@ -46,7 +46,20 @@ class Body extends StatelessWidget {
             Meter(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [SpellButton(), SpellButton(), SpellButton()],
+              children: [
+                SpellButton(
+                  text: 'Thought',
+                  maxIncrease: 2,
+                ),
+                SpellButton(
+                  text: 'Scheme',
+                  maxIncrease: 4,
+                ),
+                SpellButton(
+                  text: 'Machination',
+                  maxIncrease: 8,
+                )
+              ],
             )
           ],
         ),
