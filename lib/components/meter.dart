@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:madness_meter_flutter/providers.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+
+import '../colors.dart';
 
 class Meter extends ConsumerWidget {
-  const Meter({super.key});
+  Meter({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -13,7 +16,6 @@ class Meter extends ConsumerWidget {
     return Container(
       height: 550,
       width: 350,
-      color: Colors.black,
       child: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -27,8 +29,6 @@ class Meter extends ConsumerWidget {
             ),
             Column(
               children: [
-                // if (ref.watch(intScore) == 'none' ||
-                //     ref.watch(wisScore) == 'none')
                 Text(
                   "${ref.watch(currentMeter)}/${ref.watch(totalMeter)}",
                   style: TextStyle(fontSize: 32, color: Colors.white),
@@ -42,34 +42,47 @@ class Meter extends ConsumerWidget {
                       color: Colors.blue.shade200,
                     ),
                     Positioned(
-                      bottom: 10,
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                        width: 70,
-                        height: 70,
-                        decoration: BoxDecoration(
-                            color: Colors.blue.shade900,
-                            borderRadius: BorderRadius.circular(50),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.lightBlue,
-                                  spreadRadius: 12,
-                                  blurRadius: 12)
-                            ]),
-                      ),
-                    ),
-                    Positioned(
                       left: 0,
                       right: 0,
                       bottom: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: 800),
+                          curve: Curves.bounceOut,
+                          height: ref.watch(currentMeterPercentage) > 1
+                              ? height
+                              : height * ref.watch(currentMeterPercentage),
+                          color: percentageToHsl(
+                              ref.watch(currentMeterPercentage), 250, 0, .35),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 10,
+                      left: 0,
+                      right: 0,
                       child: AnimatedContainer(
-                        duration: Duration(milliseconds: 600),
-                        curve: Curves.bounceInOut,
-                        height: ref.watch(currentMeterPercentage) > 1
-                            ? height
-                            : height * ref.watch(currentMeterPercentage),
-                        color: Colors.yellow,
+                        duration: Duration(milliseconds: 700),
+                        curve: Curves.easeInOut,
+                        width: 70,
+                        height: 70,
+                        decoration: BoxDecoration(
+                            color: percentageToHsl(
+                                ref.watch(currentMeterPercentage), 250, 0, .40),
+                            borderRadius: BorderRadius.circular(50),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: percentageToHsl(
+                                      ref.watch(currentMeterPercentage),
+                                      250,
+                                      0,
+                                      .50),
+                                  spreadRadius: (12 +
+                                      (55 * ref.watch(currentMeterPercentage))),
+                                  blurRadius: (12 +
+                                      (55 * ref.watch(currentMeterPercentage))))
+                            ]),
                       ),
                     ),
                     Positioned(
@@ -78,13 +91,13 @@ class Meter extends ConsumerWidget {
                       right: -25,
                       child: GestureDetector(
                         onTap: () => ref.watch(currentMeter.notifier).state = 0,
-                        child: FaIcon(
-                          FontAwesomeIcons.skull,
-                          size: 128,
-                          color: Colors.black,
-                        ),
+                        child: FaIcon(FontAwesomeIcons.skull,
+                                size: 128,
+                                color: Color.lerp(Colors.black, Colors.white,
+                                    ref.watch(currentMeterPercentage)))
+                            .animate(),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ],

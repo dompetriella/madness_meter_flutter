@@ -33,3 +33,6 @@ final currentMeter = StateProvider<int>(
 
 final currentMeterPercentage = StateProvider<double>(
     (ref) => (ref.watch(currentMeter) / ref.watch(totalMeter)));
+
+final inMotion = StateProvider<bool>(
+    (ref) => ref.watch(intScore) != '' && ref.watch(wisScore) != '');
