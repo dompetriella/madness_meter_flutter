@@ -26,7 +26,7 @@ class Meter extends ConsumerWidget {
               child: ModifierButton(
                 increase: false,
               ),
-            ),
+            ).animate().fadeIn(delay: 4000.ms, duration: 1000.milliseconds),
             Column(
               children: [
                 Text(
@@ -34,15 +34,20 @@ class Meter extends ConsumerWidget {
                       ? "MADNESS"
                       : "${ref.watch(currentMeter)}/${ref.watch(totalMeter)}",
                   style: TextStyle(fontSize: 32, color: Colors.white),
-                ),
+                )
+                    .animate()
+                    .fadeIn(delay: 4500.ms)
+                    .scale(begin: Offset(2, 2), duration: 500.milliseconds),
                 Stack(
                   clipBehavior: Clip.none,
                   children: [
+                    // meter container
                     Container(
                       height: height,
                       width: 80,
                       color: Colors.blue.shade200,
-                    ),
+                    ).animate().scaleY(duration: 2000.ms, delay: 2000.ms),
+                    // meter fill
                     Positioned(
                       left: 0,
                       right: 0,
@@ -60,6 +65,7 @@ class Meter extends ConsumerWidget {
                         ),
                       ),
                     ),
+                    // skull eye base
                     Positioned(
                       bottom: 10,
                       left: 0,
@@ -95,8 +101,16 @@ class Meter extends ConsumerWidget {
                                     : 67,
                               )
                             ]),
-                      ),
+                      )
+                          .animate()
+                          .fadeIn()
+                          .scale(begin: Offset(2, 2), duration: 1.seconds)
+                          .move(
+                              begin: Offset(0, -200),
+                              duration: 2000.ms,
+                              delay: 2.seconds),
                     ),
+                    // skull base
                     Positioned(
                       bottom: -20,
                       left: -24,
@@ -107,15 +121,26 @@ class Meter extends ConsumerWidget {
                                 size: 128,
                                 color: Color.lerp(Colors.black, Colors.white,
                                     ref.watch(currentMeterPercentage)))
-                            .animate(),
+                            .animate()
+                            .fadeIn()
+                            .shimmer(duration: 1500.ms)
+                            .scale(begin: Offset(2, 2), duration: 1.seconds)
+                            .move(
+                                begin: Offset(0, -200),
+                                duration: 2000.ms,
+                                delay: 2.seconds),
                       ),
                     ),
                   ],
                 ),
               ],
             ),
+            // increase button
             const Padding(
-                padding: EdgeInsets.only(bottom: 8.0), child: ModifierButton())
+                    padding: EdgeInsets.only(bottom: 8.0),
+                    child: ModifierButton())
+                .animate()
+                .untint(delay: 4000.ms, duration: 1000.milliseconds)
           ],
         ),
       ),

@@ -52,8 +52,7 @@ class Body extends ConsumerWidget {
                     )
                   ],
                 ),
-                if (ref.watch(inMotion))
-                  Meter().animate().fadeIn(delay: 5.seconds),
+                if (ref.watch(inMotion)) Meter(),
                 if (ref.watch(inMotion))
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -61,16 +60,28 @@ class Body extends ConsumerWidget {
                       SpellButton(
                         text: 'Thought',
                         maxIncrease: 2,
-                      ),
+                      )
+                          .animate()
+                          .shake(delay: 700.ms)
+                          .blur(begin: Offset(0, 1)),
                       SpellButton(
                         text: 'Scheme',
                         maxIncrease: 4,
-                      ),
+                      )
+                          .animate()
+                          .shake(delay: 1000.ms, hz: 80, duration: 200.ms)
+                          .blur(begin: Offset(0, 2)),
                       SpellButton(
                         text: 'Machination',
                         maxIncrease: 8,
                       )
-                    ].animate(interval: 500.ms, effects: [FadeEffect()]),
+                          .animate()
+                          .shake(delay: 1300.ms, hz: 40)
+                          .blur(begin: Offset(0, 4))
+                    ].animate(interval: 500.ms, effects: [
+                      FadeEffect(delay: 200.ms),
+                      MoveEffect(begin: Offset(0, 50))
+                    ]),
                   )
               ],
             ),

@@ -20,11 +20,11 @@ int getModifier(String baseMod) {
 }
 
 final intScore = StateProvider<String>(
-  (ref) => '20',
+  (ref) => '',
 );
 
 final wisScore = StateProvider<String>(
-  (ref) => '20',
+  (ref) => '',
 );
 
 final totalMeter = StateProvider<int>((ref) =>
