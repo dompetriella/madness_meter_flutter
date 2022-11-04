@@ -46,7 +46,10 @@ class Meter extends ConsumerWidget {
                       height: height,
                       width: 80,
                       color: Colors.blue.shade200,
-                    ).animate().scaleY(duration: 2000.ms, delay: 2000.ms),
+                    ).animate().scaleY(
+                          duration: 2000.ms,
+                          delay: 2000.ms,
+                        ),
                     // meter fill
                     Positioned(
                       left: 0,
@@ -108,7 +111,8 @@ class Meter extends ConsumerWidget {
                           .move(
                               begin: Offset(0, -200),
                               duration: 2000.ms,
-                              delay: 2.seconds),
+                              delay: 2.seconds,
+                              curve: Curves.fastOutSlowIn),
                     ),
                     // skull base
                     Positioned(
@@ -124,7 +128,10 @@ class Meter extends ConsumerWidget {
                             .animate()
                             .fadeIn()
                             .shimmer(duration: 1500.ms)
-                            .scale(begin: Offset(2, 2), duration: 1.seconds)
+                            .scale(
+                                begin: Offset(2, 2),
+                                duration: 1.seconds,
+                                curve: Curves.fastOutSlowIn)
                             .move(
                                 begin: Offset(0, -200),
                                 duration: 2000.ms,

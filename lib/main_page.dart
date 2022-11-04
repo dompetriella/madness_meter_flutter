@@ -62,22 +62,19 @@ class Body extends ConsumerWidget {
                         maxIncrease: 2,
                       )
                           .animate()
-                          .shake(delay: 700.ms)
-                          .blur(begin: Offset(0, 1)),
+                          .blur(begin: Offset(2, 2), duration: 2.seconds),
                       SpellButton(
                         text: 'Scheme',
                         maxIncrease: 4,
                       )
                           .animate()
-                          .shake(delay: 1000.ms, hz: 80, duration: 200.ms)
-                          .blur(begin: Offset(0, 2)),
+                          .blur(begin: Offset(8, 8), duration: 2.seconds),
                       SpellButton(
                         text: 'Machination',
                         maxIncrease: 8,
                       )
                           .animate()
-                          .shake(delay: 1300.ms, hz: 40)
-                          .blur(begin: Offset(0, 4))
+                          .blur(begin: Offset(14, 14), duration: 2.seconds)
                     ].animate(interval: 500.ms, effects: [
                       FadeEffect(delay: 200.ms),
                       MoveEffect(begin: Offset(0, 50))
