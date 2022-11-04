@@ -40,6 +40,7 @@ dependencies:
   flutter_riverpod: ^2.1.1
   font_awesome_flutter: ^10.2.1
   flutter_animate: ^2.0.1
+  blobs: ^2.0.0
 
 dev_dependencies:
   flutter_test:

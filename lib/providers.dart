@@ -1,4 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:blobs/blobs.dart';
+import 'package:flutter/material.dart';
+import 'colors.dart';
 
 int getModifier(String baseMod) {
   if (baseMod == '') return 0;
@@ -17,11 +20,11 @@ int getModifier(String baseMod) {
 }
 
 final intScore = StateProvider<String>(
-  (ref) => '',
+  (ref) => '20',
 );
 
 final wisScore = StateProvider<String>(
-  (ref) => '',
+  (ref) => '20',
 );
 
 final totalMeter = StateProvider<int>((ref) =>

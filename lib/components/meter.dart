@@ -30,7 +30,9 @@ class Meter extends ConsumerWidget {
             Column(
               children: [
                 Text(
-                  "${ref.watch(currentMeter)}/${ref.watch(totalMeter)}",
+                  (ref.watch(currentMeterPercentage) > 1)
+                      ? "MADNESS"
+                      : "${ref.watch(currentMeter)}/${ref.watch(totalMeter)}",
                   style: TextStyle(fontSize: 32, color: Colors.white),
                 ),
                 Stack(
@@ -49,7 +51,7 @@ class Meter extends ConsumerWidget {
                         padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                         child: AnimatedContainer(
                           duration: Duration(milliseconds: 800),
-                          curve: Curves.bounceOut,
+                          curve: Curves.easeIn,
                           height: ref.watch(currentMeterPercentage) > 1
                               ? height
                               : height * ref.watch(currentMeterPercentage),
@@ -64,24 +66,34 @@ class Meter extends ConsumerWidget {
                       right: 0,
                       child: AnimatedContainer(
                         duration: Duration(milliseconds: 700),
-                        curve: Curves.easeInOut,
+                        curve: Curves.easeIn,
                         width: 70,
                         height: 70,
                         decoration: BoxDecoration(
                             color: percentageToHsl(
-                                ref.watch(currentMeterPercentage), 250, 0, .40),
+                                ref.watch(currentMeterPercentage), 250, 0, .30),
                             borderRadius: BorderRadius.circular(50),
                             boxShadow: [
                               BoxShadow(
-                                  color: percentageToHsl(
-                                      ref.watch(currentMeterPercentage),
-                                      250,
-                                      0,
-                                      .50),
-                                  spreadRadius: (12 +
-                                      (55 * ref.watch(currentMeterPercentage))),
-                                  blurRadius: (12 +
-                                      (55 * ref.watch(currentMeterPercentage))))
+                                color: percentageToHsl(
+                                    ref.watch(currentMeterPercentage),
+                                    250,
+                                    0,
+                                    .35),
+                                spreadRadius: ref
+                                            .watch(currentMeterPercentage) <=
+                                        1
+                                    ? (12 +
+                                        (55 *
+                                            ref.watch(currentMeterPercentage)))
+                                    : 67,
+                                blurRadius: ref.watch(currentMeterPercentage) <=
+                                        1
+                                    ? (12 +
+                                        (55 *
+                                            ref.watch(currentMeterPercentage)))
+                                    : 67,
+                              )
                             ]),
                       ),
                     ),
