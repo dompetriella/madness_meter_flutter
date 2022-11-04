@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:madness_meter_flutter/components/spell_button.dart';
 import 'package:madness_meter_flutter/components/statsInput.dart';
-import 'colors.dart';
+import 'global_functions.dart';
 import 'package:madness_meter_flutter/providers.dart';
 import 'components/meter.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -17,11 +17,7 @@ class MainPage extends ConsumerWidget {
         backgroundColor: ref.watch(currentMeterPercentage) == 0
             ? Colors.black
             : percentageToHsl(ref.watch(currentMeterPercentage), 250, 0, .05),
-        body: MediaQuery.of(context).size.height < 750
-            ? ListView(
-                children: [Body()],
-              )
-            : Body());
+        body: Body());
   }
 }
 
@@ -32,7 +28,10 @@ class Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var height = MediaQuery.of(context).size.height;
+
     return Container(
+      height: height,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Stack(
@@ -52,7 +51,10 @@ class Body extends ConsumerWidget {
                     )
                   ],
                 ),
-                if (ref.watch(inMotion)) Meter(),
+                if (ref.watch(inMotion))
+                  Meter(
+                    inheritedHeight: height * .65,
+                  ),
                 if (ref.watch(inMotion))
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -102,8 +104,8 @@ class Blobs extends ConsumerWidget {
           duration: Duration(milliseconds: 500),
           top: -1000 +
               (ref.watch(currentMeterPercentage) > 1.5
-                  ? 450 * 1.5
-                  : 450 * ref.watch(currentMeterPercentage)),
+                  ? 400 * 1.5
+                  : 400 * ref.watch(currentMeterPercentage)),
           left: -250,
           child: Builder(builder: (context) {
             return Blob.animatedRandom(
@@ -125,8 +127,8 @@ class Blobs extends ConsumerWidget {
           duration: Duration(milliseconds: 500),
           top: -400 +
               (ref.watch(currentMeterPercentage) > 1.5
-                  ? 200 * 1.5
-                  : 200 * ref.watch(currentMeterPercentage)),
+                  ? 150 * 1.5
+                  : 150 * ref.watch(currentMeterPercentage)),
           left: 0,
           child: Blob.animatedRandom(
             styles: BlobStyles(

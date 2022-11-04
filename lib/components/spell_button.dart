@@ -14,7 +14,6 @@ class SpellButton extends ConsumerWidget {
     int getRandomNumber(int maxIncrease) {
       Random random = new Random();
       int value = random.nextInt(maxIncrease) + 1;
-      print(value);
       return value;
     }
 

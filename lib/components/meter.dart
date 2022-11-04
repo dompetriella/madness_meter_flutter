@@ -4,17 +4,19 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:madness_meter_flutter/providers.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-import '../colors.dart';
+import '../global_functions.dart';
 
 class Meter extends ConsumerWidget {
-  Meter({super.key});
+  final inheritedHeight;
+  Meter({super.key, required this.inheritedHeight});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    double height = 480;
+    double height = inheritedHeight;
+    double meterHeight = height * .9;
 
     return Container(
-      height: 550,
+      height: height,
       width: 350,
       child: Center(
         child: Row(
@@ -43,7 +45,7 @@ class Meter extends ConsumerWidget {
                   children: [
                     // meter container
                     Container(
-                      height: height,
+                      height: meterHeight,
                       width: 80,
                       color: Colors.blue.shade200,
                     ).animate().scaleY(
@@ -61,8 +63,8 @@ class Meter extends ConsumerWidget {
                           duration: Duration(milliseconds: 800),
                           curve: Curves.easeIn,
                           height: ref.watch(currentMeterPercentage) > 1
-                              ? height
-                              : height * ref.watch(currentMeterPercentage),
+                              ? meterHeight
+                              : meterHeight * ref.watch(currentMeterPercentage),
                           color: percentageToHsl(
                               ref.watch(currentMeterPercentage), 250, 0, .35),
                         ),
@@ -121,21 +123,42 @@ class Meter extends ConsumerWidget {
                       right: -25,
                       child: GestureDetector(
                         onTap: () => ref.watch(currentMeter.notifier).state = 0,
-                        child: FaIcon(FontAwesomeIcons.skull,
-                                size: 128,
-                                color: Color.lerp(Colors.black, Colors.white,
-                                    ref.watch(currentMeterPercentage)))
-                            .animate()
-                            .fadeIn()
-                            .shimmer(duration: 1500.ms)
-                            .scale(
-                                begin: Offset(2, 2),
-                                duration: 1.seconds,
-                                curve: Curves.fastOutSlowIn)
-                            .move(
-                                begin: Offset(0, -200),
-                                duration: 2000.ms,
-                                delay: 2.seconds),
+                        child: Stack(
+                          children: [
+                            FaIcon(FontAwesomeIcons.skull,
+                                    size: 128,
+                                    color: Color.lerp(
+                                        Colors.black,
+                                        Colors.white,
+                                        ref.watch(currentMeterPercentage)))
+                                .animate()
+                                .fadeIn()
+                                .shimmer(duration: 1500.ms)
+                                .scale(
+                                    begin: Offset(2, 2),
+                                    duration: 1.seconds,
+                                    curve: Curves.fastOutSlowIn)
+                                .move(
+                                    begin: Offset(0, -200),
+                                    duration: 2000.ms,
+                                    delay: 2.seconds),
+                            if (ref.watch(currentMeterPercentage) > 1)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10.0),
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(getRandomNumber(4).toString(),
+                                      style: TextStyle(
+                                          color: percentageToHsl(
+                                              ref.watch(currentMeterPercentage),
+                                              250,
+                                              0,
+                                              .20),
+                                          fontSize: 30)),
+                                ),
+                              )
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -173,7 +196,6 @@ class ModifierButton extends ConsumerWidget {
       onPressed: () {
         if (increase) {
           ref.watch(currentMeter.notifier).state++;
-          print(ref.watch(currentMeter));
         } else {
           if (ref.watch(currentMeter) > 0) {
             ref.watch(currentMeter.notifier).state--;

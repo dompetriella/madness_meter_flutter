@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:blobs/blobs.dart';
 import 'package:flutter/material.dart';
-import 'colors.dart';
+import 'global_functions.dart';
 
 int getModifier(String baseMod) {
   if (baseMod == '') return 0;
