@@ -23,7 +23,7 @@
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="madness_meter_flutter">
+  <meta name="apple-mobile-web-app-title" content="Madness Meter">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
@@ -31,6 +31,7 @@
 
   <title>madness_meter_flutter</title>
   <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" type="text/css" href="styles.css">
 
   <script>
     // The value below is injected by flutter build, do not touch.
@@ -40,6 +41,11 @@
   <script src="flutter.js" defer></script>
 </head>
 <body>
+  <div class="center">
+    <div class="source"></div>
+    <div class="loading-text">Loading...</div>
+  </div>
+
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js

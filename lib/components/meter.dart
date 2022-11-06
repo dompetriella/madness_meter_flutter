@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:madness_meter_flutter/providers.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../global_functions.dart';
 
@@ -13,7 +14,7 @@ class Meter extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     double height = inheritedHeight;
-    double meterHeight = height * .9;
+    double meterHeight = height * .85;
 
     return Container(
       height: height,
@@ -47,10 +48,16 @@ class Meter extends ConsumerWidget {
                     Container(
                       height: meterHeight,
                       width: 80,
-                      color: Colors.blue.shade200,
+                      decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border(
+                              left: BorderSide(
+                                  color: Colors.blue.shade200, width: 10),
+                              right: BorderSide(
+                                  color: Colors.blue.shade200, width: 10))),
                     ).animate().scaleY(
                           duration: 2000.ms,
-                          delay: 2000.ms,
+                          delay: 2200.ms,
                         ),
                     // meter fill
                     Positioned(
@@ -58,7 +65,7 @@ class Meter extends ConsumerWidget {
                       right: 0,
                       bottom: 0,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        padding: const EdgeInsets.only(left: 15.0, right: 15.0),
                         child: AnimatedContainer(
                           duration: Duration(milliseconds: 800),
                           curve: Curves.easeIn,
@@ -67,7 +74,7 @@ class Meter extends ConsumerWidget {
                               : meterHeight * ref.watch(currentMeterPercentage),
                           color: percentageToHsl(
                               ref.watch(currentMeterPercentage), 250, 0, .35),
-                        ),
+                        ).animate().fadeIn(delay: 5.seconds),
                       ),
                     ),
                     // skull eye base
@@ -122,7 +129,12 @@ class Meter extends ConsumerWidget {
                       left: -24,
                       right: -25,
                       child: GestureDetector(
-                        onTap: () => ref.watch(currentMeter.notifier).state = 0,
+                        onTap: () async {
+                          final prefs = await SharedPreferences.getInstance();
+                          ref.watch(currentMeter.notifier).state = 0;
+                          await prefs.setInt(
+                              'currentMeter', ref.read(currentMeter));
+                        },
                         child: Stack(
                           children: [
                             FaIcon(FontAwesomeIcons.skull,
@@ -146,16 +158,8 @@ class Meter extends ConsumerWidget {
                               Padding(
                                 padding: const EdgeInsets.only(top: 10.0),
                                 child: Align(
-                                  alignment: Alignment.center,
-                                  child: Text(getRandomNumber(4).toString(),
-                                      style: TextStyle(
-                                          color: percentageToHsl(
-                                              ref.watch(currentMeterPercentage),
-                                              250,
-                                              0,
-                                              .20),
-                                          fontSize: 30)),
-                                ),
+                                    alignment: Alignment.center,
+                                    child: MadnessRoll()),
                               )
                           ],
                         ),
@@ -170,11 +174,28 @@ class Meter extends ConsumerWidget {
                     padding: EdgeInsets.only(bottom: 8.0),
                     child: ModifierButton())
                 .animate()
-                .untint(delay: 4000.ms, duration: 1000.milliseconds)
+                .fadeIn(delay: 4000.ms, duration: 1000.milliseconds)
           ],
         ),
       ),
     );
+  }
+}
+
+class MadnessRoll extends ConsumerWidget {
+  const MadnessRoll({
+    Key? key,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    var _fadeController;
+    return Text('${ref.watch(madnessRoll)}',
+            style: TextStyle(
+                color: percentageToHsl(
+                    ref.watch(currentMeterPercentage), 250, 0, .20),
+                fontSize: 30))
+        .animate()
+        .fadeIn(delay: 100.ms);
   }
 }
 
@@ -193,12 +214,15 @@ class ModifierButton extends ConsumerWidget {
         increase ? Icons.add : Icons.remove,
         color: Colors.white,
       ),
-      onPressed: () {
+      onPressed: () async {
+        final prefs = await SharedPreferences.getInstance();
         if (increase) {
           ref.watch(currentMeter.notifier).state++;
+          await prefs.setInt('currentMeter', ref.read(currentMeter));
         } else {
           if (ref.watch(currentMeter) > 0) {
             ref.watch(currentMeter.notifier).state--;
+            await prefs.setInt('currentMeter', ref.read(currentMeter));
           }
         }
       },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:madness_meter_flutter/providers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StatsInput extends ConsumerWidget {
   final String text;
@@ -32,12 +33,23 @@ class StatsInput extends ConsumerWidget {
                 textAlign: TextAlign.center,
                 cursorColor: Colors.white,
                 keyboardType: TextInputType.number,
-                onChanged: (input) {
+                decoration: InputDecoration(
+                  hintText:
+                      text == 'INT' ? ref.watch(intScore) : ref.watch(wisScore),
+                  hintStyle: TextStyle(
+                      color: Colors.white,
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold),
+                ),
+                onChanged: (input) async {
+                  final prefs = await SharedPreferences.getInstance();
                   if (text == 'INT') {
                     ref.watch(intScore.notifier).state = input;
+                    await prefs.setString('intScore', input);
                   }
                   if (text == 'WIS') {
                     ref.watch(wisScore.notifier).state = input;
+                    await prefs.setString('wisScore', input);
                   }
                 },
               ),

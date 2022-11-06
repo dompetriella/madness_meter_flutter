@@ -20,11 +20,11 @@ int getModifier(String baseMod) {
 }
 
 final intScore = StateProvider<String>(
-  (ref) => '20',
+  (ref) => '',
 );
 
 final wisScore = StateProvider<String>(
-  (ref) => '20',
+  (ref) => '',
 );
 
 final totalMeter = StateProvider<int>((ref) =>
@@ -39,3 +39,7 @@ final currentMeterPercentage = StateProvider<double>(
 
 final inMotion = StateProvider<bool>(
     (ref) => ref.watch(intScore) != '' && ref.watch(wisScore) != '');
+
+final madnessRoll = StateProvider<int>(
+  (ref) => 1,
+);

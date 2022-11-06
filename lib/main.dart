@@ -14,6 +14,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: SafeArea(child: const MainPage()),
+      theme: ThemeData(
+        fontFamily: 'Helvetica',
+      ),
     );
   }
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:math';
 
 import 'package:madness_meter_flutter/providers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SpellButton extends ConsumerWidget {
   final String text;
@@ -17,9 +19,14 @@ class SpellButton extends ConsumerWidget {
       return value;
     }
 
-    return GestureDetector(
-      onTap: () =>
-          ref.read(currentMeter.notifier).state += getRandomNumber(maxIncrease),
+    return Bounce(
+      duration: Duration(milliseconds: 100),
+      onPressed: () async {
+        final prefs = await SharedPreferences.getInstance();
+        ref.read(currentMeter.notifier).state += getRandomNumber(maxIncrease);
+        await prefs.setInt('currentMeter', ref.read(currentMeter));
+        ref.watch(madnessRoll.notifier).state = getRandomNumber(4);
+      },
       child: Container(
         height: 60,
         width: 100,

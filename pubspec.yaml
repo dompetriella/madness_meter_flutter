@@ -42,6 +42,8 @@ dependencies:
   flutter_animate: ^2.0.1
   blobs: ^2.0.0
   firebase_core: ^2.1.1
+  flutter_bounce: ^1.1.0
+  shared_preferences: ^2.0.15
 
 dev_dependencies:
   flutter_test:

@@ -3,16 +3,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:madness_meter_flutter/components/spell_button.dart';
 import 'package:madness_meter_flutter/components/statsInput.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'global_functions.dart';
 import 'package:madness_meter_flutter/providers.dart';
 import 'components/meter.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-class MainPage extends ConsumerWidget {
+class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MainPage> createState() => _MainPageState();
+}
+
+Future getStoredData(WidgetRef ref) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? storedIntScore = prefs.getString('intScore');
+  String? storedWisScore = prefs.getString('wisScore');
+  int? storedcurrentMeter = prefs.getInt('currentMeter');
+  ref.read(intScore.notifier).state = storedIntScore ?? '';
+  ref.read(wisScore.notifier).state = storedWisScore ?? '';
+  ref.read(currentMeter.notifier).state = storedcurrentMeter ?? 0;
+}
+
+class _MainPageState extends ConsumerState<MainPage> {
+  @override
+  void initState() {
+    getStoredData(ref);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: ref.watch(currentMeterPercentage) == 0
             ? Colors.black
@@ -62,21 +84,15 @@ class Body extends ConsumerWidget {
                       SpellButton(
                         text: 'Thought',
                         maxIncrease: 2,
-                      )
-                          .animate()
-                          .blur(begin: Offset(2, 2), duration: 2.seconds),
+                      ),
                       SpellButton(
                         text: 'Scheme',
                         maxIncrease: 4,
-                      )
-                          .animate()
-                          .blur(begin: Offset(8, 8), duration: 2.seconds),
+                      ),
                       SpellButton(
                         text: 'Machination',
                         maxIncrease: 8,
-                      )
-                          .animate()
-                          .blur(begin: Offset(14, 14), duration: 2.seconds)
+                      ),
                     ].animate(interval: 500.ms, effects: [
                       FadeEffect(delay: 200.ms),
                       MoveEffect(begin: Offset(0, 50))
@@ -84,6 +100,36 @@ class Body extends ConsumerWidget {
                   )
               ],
             ),
+            if (ref.watch(currentMeterPercentage) > 1)
+              Padding(
+                  padding: const EdgeInsets.all(40.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(ref.watch(currentMeter).toString(),
+                            style: TextStyle(fontSize: 32, color: Colors.white))
+                        .animate()
+                        .fadeIn(duration: 500.ms)
+                        .moveY(
+                            begin: -1 * (height * .25),
+                            delay: 300.ms,
+                            duration: 500.ms,
+                            curve: Curves.easeInOut),
+                  )),
+            if (ref.watch(currentMeterPercentage) > 1)
+              Padding(
+                padding: const EdgeInsets.all(40.0),
+                child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(ref.watch(totalMeter).toString(),
+                            style: TextStyle(fontSize: 32, color: Colors.white))
+                        .animate()
+                        .fadeIn(duration: 500.ms)
+                        .moveY(
+                            begin: -1 * (height * .25),
+                            delay: 300.ms,
+                            duration: 500.ms,
+                            curve: Curves.easeInOut)),
+              ),
           ],
         ),
       ),
